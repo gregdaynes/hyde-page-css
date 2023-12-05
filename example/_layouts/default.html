@@ -1,0 +1,22 @@
+---
+css:
+  - reset.css
+  - header.css
+---
+<!doctype html>
+<html>
+<head>
+	{% for file in page.css_files -%}
+	<link rel="stylesheet" href="{{ file | prepend: '/' | prepend: site.baseurl }}">
+	{% endfor %}
+</head>
+<body>
+	<header>
+		<h1>{{ site.title }}</h1>
+	</header>
+
+	<main>
+	{{ content }}
+	</main>
+</body>
+</html>
