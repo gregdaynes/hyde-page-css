@@ -115,7 +115,7 @@ module Hyde
       end
 
       def minify(data)
-        return data if !config('minify') == true
+        return data if config('minify') == false
 
         converter_config = { 'sass' => { 'style' => 'compressed' } }
         Jekyll::Converters::Scss.new(converter_config).convert(data)
