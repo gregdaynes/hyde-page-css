@@ -28,7 +28,8 @@ module Hyde
         "file_output_path" => 'assets/css',
         "css_minify" => true,
         "enable" => true,
-        "keep_files" => true
+        "keep_files" => true,
+        "dev_mode" => false
       }
 
       def initialize(layout, info)
@@ -62,11 +63,10 @@ module Hyde
           break if !files&.length
 
           data = concatenate_files(files.compact)
-
+          data = minify(data)
           next if data == ""
 
-          data = minify(data)
-          file = generate_file(data)
+          file = generate_file(files, data)
           css_files << file.url
 
           # file already exists, so skip writing out the data to disk
@@ -116,14 +116,24 @@ module Hyde
 
       def minify(data)
         return data if config('minify') == false
+        return data if config('dev_mode') == true
 
         converter_config = { 'sass' => { 'style' => 'compressed' } }
         Jekyll::Converters::Scss.new(converter_config).convert(data)
       end
 
-      def generate_file(data)
-        hashed_file_name = Digest::MD5.hexdigest(data) + '.css'
-        Hyde::Page::GeneratedPageCssFile.new(@site, config('asset_path'), hashed_file_name)
+      def generate_file(files, data)
+        file_name = generate_file_name(files, data)
+
+        Hyde::Page::GeneratedPageCssFile.new(@site, config('asset_path'), file_name)
+      end
+
+      def generate_file_name(files, data)
+        if config('dev_mode')
+          file_name = files.map { |file| file.gsub('.css', '') }.join('-') + '.css'
+        else
+          file_name = Digest::MD5.hexdigest(data) + '.css'
+        end
       end
     end
   end

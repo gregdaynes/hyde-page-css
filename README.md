@@ -64,6 +64,7 @@ hyde_page_css:
   css_minify: true
   enable: true
   keep_files: true
+	dev_mode: false
 ```
 
 `asset_path`
@@ -80,3 +81,6 @@ hyde_page_css:
 
 `keep_files`
 : will not delete files between builds, and will reuse existing files if they match.
+
+`dev_mode`
+: skip minification and hashing of file names.
