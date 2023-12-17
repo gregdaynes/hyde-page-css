@@ -40,7 +40,7 @@ module Hyde
 
         @qualified_asset_path = File.join(*[@site.source, @config['asset_path']].compact)
 
-        if config('keep_files') == true
+        if config('keep_files') == true && config('dev_mode') == false
           @site.config['keep_files'].push(config('file_output_path'))
         end
 
@@ -115,10 +115,15 @@ module Hyde
       end
 
       def minify(data)
-        return data if config('minify') == false
-        return data if config('dev_mode') == true
+        if config('dev_mode') == true
+          style = 'expanded'
+        elsif config('css_minify') == false
+          style = 'expanded'
+        else
+          style = 'compressed'
+        end
 
-        converter_config = { 'sass' => { 'style' => 'compressed' } }
+        converter_config = { 'sass' => { 'style' => style } }
         Jekyll::Converters::Scss.new(converter_config).convert(data)
       end
 
@@ -128,12 +133,16 @@ module Hyde
         Hyde::Page::GeneratedPageCssFile.new(@site, config('asset_path'), file_name)
       end
 
-      def generate_file_name(files, data)
+      def generate_file_name(files, data, prefix: nil)
+        file_names = [prefix]
+
         if config('dev_mode')
-          file_name = files.map { |file| file.gsub('.css', '') }.join('-') + '.css'
-        else
-          file_name = Digest::MD5.hexdigest(data) + '.css'
+          files.each { |file| file_names.push(file.gsub('.css', '')) }
         end
+
+        file_names.push(Digest::MD5.hexdigest(data)[0,6])
+
+        file_names.compact.join('-') + '.css'
       end
     end
   end

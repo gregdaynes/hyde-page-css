@@ -9,7 +9,7 @@ Installation
 
 1. Add Hyde Page CSS to your Gemfile
 
-`gem 'hyde-page-css', '~> 0.1.0'`
+`gem 'hyde-page-css', '~> 0.2.3'`
 
 2. Add entry to your Jekyll config under plugins
 
@@ -83,4 +83,5 @@ hyde_page_css:
 : will not delete files between builds, and will reuse existing files if they match.
 
 `dev_mode`
-: skip minification and hashing of file names.
+: skip minification of css, the filename will be formed of the files included with a trailing hash to bust cache. eg: `base.css, home.css => base-home-2d738a.css`.
+
