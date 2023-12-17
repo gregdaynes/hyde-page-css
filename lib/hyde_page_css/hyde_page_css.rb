@@ -35,7 +35,7 @@ module Hyde
         @site = info[:registers][:site]
         @page = info[:registers][:page]
         @data = layout.data
-        @config = @@config.merge(@site.config.dig('hyde_page_css'))
+        @config = @@config.merge(@site.config.dig('hyde_page_css') || {})
 
         @qualified_asset_path = File.join(*[@site.source, @config['asset_path']].compact)
 
