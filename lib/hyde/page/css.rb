@@ -1,31 +1,12 @@
 require 'jekyll'
-require_relative 'generated_page_css_file.rb'
-
-module Jekyll
-  class Renderer
-    def render_layout(output, layout, info)
-      Hyde::Page::Css.new(layout, info).generate
-
-      # TODO Would be nice to call super here instead of cloned logic from Jekyll internals
-      payload["content"] = output
-      payload["layout"]  = Utils.deep_merge_hashes(layout.data, payload["layout"] || {})
-
-      render_liquid(
-        layout.content,
-        payload,
-        info,
-        layout.path
-      )
-    end
-  end
-end
+require_relative "generated_page_css_file"
 
 module Hyde
   module Page
     class Css
       @@config = {
-        "asset_path" => 'assets/css',
-        "file_output_path" => 'assets/css',
+        "asset_path" => "assets/css",
+        "file_output_path" => "assets/css",
         "css_minify" => true,
         "enable" => true,
         "keep_files" => true,
@@ -36,24 +17,24 @@ module Hyde
         @site = info[:registers][:site]
         @page = info[:registers][:page]
         @data = layout.data
-        @config = @@config.merge(@site.config.dig('hyde_page_css') || {})
+        @config = @@config.merge(@site.config.dig("hyde_page_css") || {})
 
-        @qualified_asset_path = File.join(*[@site.source, @config['asset_path']].compact)
+        @qualified_asset_path = File.join(*[@site.source, @config["asset_path"]].compact)
 
-        if config('keep_files') == true && config('dev_mode') == false
-          @site.config['keep_files'].push(config('file_output_path'))
+        if config("keep_files") == true && config("dev_mode") == false
+          @site.config["keep_files"].push(config("file_output_path"))
         end
 
-        if @page["css"].nil?
-          @page["css"] = []
+        @page["css"] = if @page["css"].nil?
+          []
         else
-          @page["css"] = [@page["css"]]
+          [@page["css"]]
         end
       end
 
       def generate
-        return unless config('enable') == true
-        @page["css"].unshift(@data['css'])
+        return unless config("enable") == true
+        @page["css"].unshift(@data["css"])
 
         file_groups = flatten_group(@page["css"])
 
@@ -80,13 +61,13 @@ module Hyde
         end
 
         # the recursive nature of this will sometimes have duplicate css files
-        @page['css_files'] = css_files.uniq
+        @page["css_files"] = css_files.uniq
       end
 
-    private
+      private
 
-      def config(*keys)
-        @config.dig(*keys)
+      def config(*)
+        @config.dig(*)
       end
 
       def flatten_group(arr, acc = [])
@@ -96,18 +77,19 @@ module Hyde
         acc += flatten_group(arr.last)
       end
 
-      def concatenate_files(files, data = '')
+      def concatenate_files(files, data = "")
         for file in files do
           # tmp page required to handle anything with frontmatter/yaml header
-          tmp_page = Jekyll::PageWithoutAFile.new(@site, nil, config('asset_path'), file)
+          tmp_page = Jekyll::PageWithoutAFile.new(@site, nil, config("asset_path"), file)
           path = File.join([@qualified_asset_path, file])
 
           begin
             file_contents = File.read(path)
             tmp_page.content = file_contents
-            data << Jekyll::Renderer.new(@site, tmp_page).run()
+            # original jekyll renderer, not our modified version
+            data << Jekyll::Renderer.new(@site, tmp_page).run
           rescue
-            Jekyll.logger.warn('Page CSS Warning:', "Unable to find #{path}")
+            Jekyll.logger.warn("Page CSS Warning:", "Unable to find #{path}")
           end
         end
 
@@ -115,34 +97,34 @@ module Hyde
       end
 
       def minify(data)
-        if config('dev_mode') == true
-          style = 'expanded'
-        elsif config('css_minify') == false
-          style = 'expanded'
+        style = if config("dev_mode") == true
+          "expanded"
+        elsif config("css_minify") == false
+          "expanded"
         else
-          style = 'compressed'
+          "compressed"
         end
 
-        converter_config = { 'sass' => { 'style' => style } }
+        converter_config = {"sass" => {"style" => style}}
         Jekyll::Converters::Scss.new(converter_config).convert(data)
       end
 
       def generate_file(files, data)
         file_name = generate_file_name(files, data)
 
-        Hyde::Page::GeneratedPageCssFile.new(@site, config('asset_path'), file_name)
+        Hyde::Page::GeneratedPageCssFile.new(@site, config("asset_path"), file_name)
       end
 
       def generate_file_name(files, data, prefix: nil)
         file_names = [prefix]
 
-        if config('dev_mode')
-          files.each { |file| file_names.push(file.gsub('.css', '')) }
+        if config("dev_mode")
+          files.each { |file| file_names.push(file.gsub(".css", "")) }
         end
 
-        file_names.push(Digest::MD5.hexdigest(data)[0,6])
+        file_names.push(Digest::MD5.hexdigest(data)[0, 6])
 
-        file_names.compact.join('-') + '.css'
+        file_names.compact.join("-") + ".css"
       end
     end
   end

@@ -9,13 +9,13 @@ Installation
 
 1. Add Hyde Page CSS to your Gemfile
 
-`gem 'hyde-page-css', '~> 0.2.3'`
+`gem 'hyde-page-css', '~> 0.3.0'`
 
 2. Add entry to your Jekyll config under plugins
 
 ```yaml
 plugins:
-  - hyde_page_css
+  - hyde-page-css
   ...
 ```
 

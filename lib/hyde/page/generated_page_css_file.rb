@@ -9,12 +9,12 @@ module Hyde
 
       def initialize(site, dir, name)
         @site = site
-        @dir  = dir
+        @dir = dir
         @name = name
         @relative_path = File.join(*[@dir, @name].compact)
         @extname = File.extname(@name)
         @type = @collection&.label&.to_sym
-        @generator = 'hyde_page_css'
+        @generator = "hyde-page-css"
       end
 
       def write(dest)
@@ -24,7 +24,7 @@ module Hyde
         FileUtils.mkdir_p(File.dirname(dest_path))
         FileUtils.rm(dest_path) if File.exist?(dest_path)
 
-        File.open(dest_path, 'w') do |output_file|
+        File.open(dest_path, "w") do |output_file|
           output_file << file_contents
         end
 

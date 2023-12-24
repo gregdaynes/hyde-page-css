@@ -19,4 +19,3 @@ task :build do
   system "gem build #{gemspec.name}.gemspec"
   system "gem install #{gemspec.name}-#{Hyde::Page::Css::VERSION}.gem"
 end
-

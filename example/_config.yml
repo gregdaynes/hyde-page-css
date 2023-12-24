@@ -33,7 +33,7 @@ github_username:  jekyll
 # theme: minima
 plugins:
   - jekyll-feed
-  - hyde_page_css
+  - hyde-page-css
 
 # Exclude from processing.
 # The following items will not be processed, by default.
@@ -54,3 +54,7 @@ plugins:
 #   - vendor/cache/
 #   - vendor/gems/
 #   - vendor/ruby/
+
+hyde_page_css:
+  dev_mode: true
+  keep_files: false
