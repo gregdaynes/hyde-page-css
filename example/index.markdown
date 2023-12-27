@@ -5,6 +5,7 @@
 layout: default
 css:
   - home.css
+  - posts.css
 ---
 
 <h1 class="welcome">Welcome</h1>
