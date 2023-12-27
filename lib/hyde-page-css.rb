@@ -146,7 +146,7 @@ module Hyde
       end
 
       def fetch_css(obj_with_data, default = [])
-        [obj_with_data.data.fetch("css", []).reverse]
+        [obj_with_data.data.fetch("css", [])]
       end
 
       def fetch_layout(layout_name, default = nil)
