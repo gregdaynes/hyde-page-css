@@ -1,5 +1,5 @@
-require 'jekyll'
-require 'digest'
+require "jekyll"
+require "digest"
 
 Jekyll::Hooks.register :pages, :post_init do |page|
   Hyde::Page::Css.new(page).run if page.instance_of? Jekyll::Page
@@ -54,7 +54,7 @@ module Hyde
         @page = page
         @site = page.site
         @config = fetch_config
-        @site.data['_hyde_pages_cache'] ||= {}
+        @site.data["_hyde_pages_cache"] ||= {}
 
         if keep_files? && !dev_mode?
           @site.config.fetch("keep_files").push(destination)
@@ -69,7 +69,7 @@ module Hyde
 
         for group in css_groups
           lookup_name = names_to_key(group)
-          cache_entry = @site.data['_hyde_pages_cache'].fetch(lookup_name, nil)
+          cache_entry = @site.data["_hyde_pages_cache"].fetch(lookup_name, nil)
 
           if cache_entry.nil?
             data = concatenate_files(group)
@@ -91,10 +91,10 @@ module Hyde
 
             # add to cache
             cache_entry = {
-              "url": generated_file.url,
-              "data": data
+              url: generated_file.url,
+              data: data
             }
-            @site.data['_hyde_pages_cache'][lookup_name] = cache_entry
+            @site.data["_hyde_pages_cache"][lookup_name] = cache_entry
           end
 
           # assign to page.data.css_files for liquid output
@@ -105,12 +105,12 @@ module Hyde
       private
 
       def names_to_key(names)
-        names.join('-')
+        names.join("-")
       end
 
       def add_to_urls(url)
-        @page.data['css_files'] ||= []
-        @page.data['css_files'].push(url)
+        @page.data["css_files"] ||= []
+        @page.data["css_files"].push(url)
       end
 
       def fetch_config
@@ -142,11 +142,11 @@ module Hyde
       end
 
       def fetch_layout_name(obj_with_data, default = nil)
-        obj_with_data.data.fetch('layout', default)
+        obj_with_data.data.fetch("layout", default)
       end
 
       def fetch_css(obj_with_data, default = [])
-        [obj_with_data.data.fetch('css', []).reverse]
+        [obj_with_data.data.fetch("css", []).reverse]
       end
 
       def fetch_layout(layout_name, default = nil)
