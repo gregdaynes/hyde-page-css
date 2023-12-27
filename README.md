@@ -9,7 +9,7 @@ Installation
 
 1. Add Hyde Page CSS to your Gemfile
 
-`gem 'hyde-page-css', '~> 0.3.0'`
+`gem 'hyde-page-css', '~> 0.4.0'`
 
 2. Add entry to your Jekyll config under plugins
 
@@ -59,21 +59,21 @@ Hyde Page CSS comes with the following configuration. Override as necessary in y
 
 ```yaml
 hyde_page_css:
-  asset_path: assets/css
-  file_output_path: assets/css
-  css_minify: true
+  source: assets/css
+  destination: assets/css
+  minify: true
   enable: true
   keep_files: true
 	dev_mode: false
 ```
 
-`asset_path`
+`source`
 : relative path from the root of your Jekyll directory to the source css file directory
 
-`file_output_path`
+`destination`
 : relative path from the root of your generated site to the location of the generated css files
 
-`css_minify`
+`minify`
 : minify the css generated (reuses Jekyll's SASS compiler, so you can also use SASS/SCSS in your files)
 
 `enable`
