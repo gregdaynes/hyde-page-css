@@ -8,7 +8,7 @@ end
 module Hyde
   module Page
     class Css
-      VERSION = "0.4.1"
+      VERSION = "0.4.2"
     end
 
     class GeneratedCssFile < Jekyll::StaticFile
