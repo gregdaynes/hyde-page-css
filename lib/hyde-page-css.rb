@@ -5,10 +5,14 @@ Jekyll::Hooks.register :pages, :post_init do |page|
   Hyde::Page::Css.new(page).run if page.instance_of? Jekyll::Page
 end
 
+Jekyll::Hooks.register :documents, :pre_render do |document|
+  Hyde::Page::Css.new(document).run if document.instance_of? Jekyll::Document
+end
+
 module Hyde
   module Page
     class Css
-      VERSION = "0.4.2"
+      VERSION = "0.4.3"
     end
 
     class GeneratedCssFile < Jekyll::StaticFile
@@ -65,7 +69,7 @@ module Hyde
         css = fetch_css(@page)
         layout = fetch_layout(fetch_layout_name(@page))
         css_groups = parent_layout_css(layout, css).reverse
-        return if css_groups.empty?
+        return if css_groups.flatten.empty?
 
         for group in css_groups
           lookup_name = names_to_key(group)
@@ -73,21 +77,20 @@ module Hyde
 
           if cache_entry.nil?
             data = concatenate_files(group)
-            return if data == ""
+            break if data == ""
 
             data = minify(data)
-            return if data == ""
+            break if data == ""
 
             generated_file = generate_file(group, data)
-
-            # file already exists, so skip writing out the data to disk
-            return unless @site.static_files.find { |static_file| static_file.name == generated_file.name }.nil?
 
             # place file data into the new file
             generated_file.file_contents = data
 
-            # assign static file to list for jekyll to render
-            @site.static_files << generated_file
+            if @site.static_files.find { |static_file| static_file.name == generated_file.name }.nil?
+              # assign static file to list for jekyll to render
+              @site.static_files << generated_file
+            end
 
             # add to cache
             cache_entry = {
@@ -98,7 +101,7 @@ module Hyde
           end
 
           # assign to page.data.css_files for liquid output
-          add_to_urls(cache_entry.fetch(:url, nil)).compact
+          add_to_urls(cache_entry&.fetch(:url, nil))
         end
       end
 

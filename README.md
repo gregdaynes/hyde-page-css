@@ -9,7 +9,7 @@ Installation
 
 1. Add Hyde Page CSS to your Gemfile
 
-`gem 'hyde-page-css', '~> 0.4.2'`
+`gem 'hyde-page-css', '~> 0.4.3'`
 
 2. Add entry to your Jekyll config under plugins
 
