@@ -9,7 +9,7 @@ Installation
 
 1. Add Hyde Page CSS to your Gemfile
 
-`gem 'hyde-page-css', '~> 0.4.3'`
+`gem 'hyde-page-css', '~> 0.5.0'`
 
 2. Add entry to your Jekyll config under plugins
 
@@ -23,14 +23,31 @@ plugins:
 
 ```liquid
 {%- for file in page.css_files -%}
-<link rel="stylesheet" href="{{ file | prepend: '/' | prepend: site.baseurl }}">
+<link rel="stylesheet" href="{{ file.path | prepend: '/' | prepend: site.baseurl }}">
 {%- endfor %}
 ```
-
 which will render as the following, based on the number of separate css files.
 
 ```html
 <link rel="stylesheet" href="/assets/css/7ccd0b378a0983457a529eb1bbb165a5.css">
+```
+
+Alternatively load the CSS inline
+
+```liquid
+{%- for file in page.css_files -%}
+<style>
+  {{ file.content }}
+</style>
+{%- endfor %}
+```
+
+```html
+<style>
+  body {
+    padding: 0;
+  }
+</style>
 ```
 
 4. Add `css:` to your frontmatter.

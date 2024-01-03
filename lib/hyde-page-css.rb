@@ -12,7 +12,7 @@ end
 module Hyde
   module Page
     class Css
-      VERSION = "0.4.4"
+      VERSION = "0.5.0"
     end
 
     class GeneratedCssFile < Jekyll::StaticFile
@@ -102,7 +102,7 @@ module Hyde
           end
 
           # assign to page.data.css_files for liquid output
-          add_to_urls(cache_entry&.fetch(:url, nil))
+          add_to_urls(cache_entry&.fetch(:url, nil), cache_entry&.fetch(:data, nil))
         end
       end
 
@@ -112,9 +112,9 @@ module Hyde
         names.join("-")
       end
 
-      def add_to_urls(url)
+      def add_to_urls(url, data)
         @page.data["css_files"] ||= []
-        @page.data["css_files"].push(url)
+        @page.data["css_files"].push({ "path" => url, "content" => data })
       end
 
       def fetch_config
