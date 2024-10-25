@@ -72,7 +72,9 @@ module Hyde
         return if css_groups.flatten.empty?
 
         for group in css_groups
+          next if group.nil?
           next if group.empty?
+
           lookup_name = names_to_key(group)
           cache_entry = @site.data["_hyde_pages_cache"].fetch(lookup_name, nil)
 
