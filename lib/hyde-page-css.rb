@@ -50,7 +50,8 @@ module Hyde
         "minify" => true,
         "enable" => true,
         "keep_files" => true,
-        "dev_mode" => false
+        "dev_mode" => false,
+        "livereload" => false
       }
 
       def initialize(page)
@@ -128,6 +129,10 @@ module Hyde
 
       def dev_mode?
         @config.fetch("dev_mode") == true
+      end
+
+      def livereload?
+        @config.fetch("livereload") == true
       end
 
       def minify?
@@ -216,7 +221,9 @@ module Hyde
           files.each { |file| file_names.push(file.gsub(".css", "")) }
         end
 
-        file_names.push(Digest::MD5.hexdigest(data)[0, 6])
+        if @site.config["livereload"].nil?
+          file_names.push(Digest::MD5.hexdigest(data)[0, 6])
+        end
 
         file_names.compact.join("-") + ".css"
       end

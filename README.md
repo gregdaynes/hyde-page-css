@@ -81,7 +81,8 @@ hyde_page_css:
   minify: true
   enable: true
   keep_files: true
-	dev_mode: false
+  dev_mode: false
+  livereload: false
 ```
 
 `source`
@@ -101,4 +102,10 @@ hyde_page_css:
 
 `dev_mode`
 : skip minification of css, the filename will be formed of the files included with a trailing hash to bust cache. eg: `base.css, home.css => base-home-2d738a.css`.
+: if livereload is enabled, the trailing cache-busting hash will be omitted.
+
+`livereload`
+: will not include the cache-busting hash in the filename, useful for development with livereload.
+: only applies to `page.automatic_style`
+: will always use separate files for each css file included, useful for development with livereload.
 

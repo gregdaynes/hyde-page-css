@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- Livereload config to disable cache-busting hash on filenames.
+
 ### Fixed
 
 - Allow incremental builds to write updates.
