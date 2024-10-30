@@ -31,7 +31,6 @@ module Hyde
 
       def write(dest)
         dest_path = destination(dest)
-        return false if File.exist?(dest_path)
 
         FileUtils.mkdir_p(File.dirname(dest_path))
         FileUtils.rm(dest_path) if File.exist?(dest_path)
