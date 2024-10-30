@@ -50,6 +50,16 @@ Alternatively load the CSS inline
 </style>
 ```
 
+A third option to automatically switch between links and inline css
+
+```liquid
+{%- for style in page.automatic_styles -%}
+    {{ style }}
+{%- endfor -%}
+```
+
+Each separate stylesheet is checked against the threshold, and if met, it will be inlined in the page. In dev_mode or with livereload enabled, the threshold is ignored and the css is always linked.
+
 4. Add `css:` to your frontmatter.
 
 `css:` is a list of files defined in the `asset_path` in configuration.
@@ -83,6 +93,7 @@ hyde_page_css:
   keep_files: true
   dev_mode: false
   livereload: false
+  automatic_inline_threshold: 4096
 ```
 
 `source`
@@ -109,3 +120,6 @@ hyde_page_css:
 : only applies to `page.automatic_style`
 : will always use separate files for each css file included, useful for development with livereload.
 
+`automatic_inline_threshold`
+: only applies to `page.automatic_style`
+: if the css file is smaller than this threshold, it will be inlined in the page instead of linked.

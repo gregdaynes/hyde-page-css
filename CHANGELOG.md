@@ -10,6 +10,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - Livereload config to disable cache-busting hash on filenames.
+- automatic_inline_threshold to control when to inline css.
+- automatic_styles to automatically switch between links and inline css.
 
 ### Fixed
 

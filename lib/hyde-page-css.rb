@@ -51,7 +51,8 @@ module Hyde
         "enable" => true,
         "keep_files" => true,
         "dev_mode" => false,
-        "livereload" => false
+        "livereload" => false,
+        "automatic_inline_threshold" => 4096
       }
 
       def initialize(page)
@@ -117,6 +118,17 @@ module Hyde
       def add_to_urls(url, data)
         @page.data["css_files"] ||= []
         @page.data["css_files"].push({ "path" => url, "content" => data })
+
+        if (dev_mode? || livereload?)
+          @page.data["automatic_styles"] ||= []
+          @page.data["automatic_styles"].push("<link rel=\"stylesheet\" href=\"#{url}\">")
+        elsif data.size > @config.fetch("automatic_inline_threshold")
+          @page.data["automatic_styles"] ||= []
+          @page.data["automatic_styles"].push("<link rel=\"stylesheet\" href=\"#{url}\">")
+        else
+          @page.data["automatic_styles"] ||= []
+          @page.data["automatic_styles"].push("<style>#{data}</style>")
+        end
       end
 
       def fetch_config
