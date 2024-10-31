@@ -59,11 +59,15 @@ module Hyde
         @page = page
         @site = page.site
         @config = fetch_config
-        @site.data["_hyde_pages_cache"] ||= {}
+        @site.data["_hyde_pages_css_cache"] ||= Jekyll::Cache.new("hyde_pages_css")
 
         if keep_files? && !dev_mode?
           @site.config.fetch("keep_files").push(destination)
         end
+      end
+
+      def cache
+        @site.data["_hyde_pages_css_cache"]
       end
 
       def run
@@ -77,9 +81,8 @@ module Hyde
           next if group.empty?
 
           lookup_name = names_to_key(group)
-          cache_entry = @site.data["_hyde_pages_cache"].fetch(lookup_name, nil)
 
-          if cache_entry.nil?
+          cache_entry = cache.getset(lookup_name) do
             data = concatenate_files(group)
             break if data == ""
 
@@ -96,12 +99,10 @@ module Hyde
               @site.static_files << generated_file
             end
 
-            # add to cache
-            cache_entry = {
+            {
               url: generated_file.url,
               data: data
             }
-            @site.data["_hyde_pages_cache"][lookup_name] = cache_entry
           end
 
           # assign to page.data.css_files for liquid output
