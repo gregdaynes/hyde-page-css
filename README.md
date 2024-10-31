@@ -91,7 +91,6 @@ hyde_page_css:
   minify: true
   enable: true
   keep_files: true
-  dev_mode: false
   livereload: false
   automatic_inline_threshold: 4096
 ```
@@ -110,10 +109,6 @@ hyde_page_css:
 
 `keep_files`
 : will not delete files between builds, and will reuse existing files if they match.
-
-`dev_mode`
-: skip minification of css, the filename will be formed of the files included with a trailing hash to bust cache. eg: `base.css, home.css => base-home-2d738a.css`.
-: if livereload is enabled, the trailing cache-busting hash will be omitted.
 
 `livereload`
 : will not include the cache-busting hash in the filename, useful for development with livereload.

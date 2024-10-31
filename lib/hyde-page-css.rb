@@ -50,7 +50,6 @@ module Hyde
         "minify" => true,
         "enable" => true,
         "keep_files" => true,
-        "dev_mode" => false,
         "livereload" => false,
         "automatic_inline_threshold" => 4096
       }
@@ -61,7 +60,7 @@ module Hyde
         @config = fetch_config
         @site.data["_hyde_pages_css_cache"] ||= Jekyll::Cache.new("hyde_pages_css")
 
-        if keep_files? && !dev_mode?
+        if keep_files?
           @site.config.fetch("keep_files").push(destination)
         end
       end
@@ -120,12 +119,12 @@ module Hyde
         @page.data["css_files"] ||= []
         @page.data["css_files"].push({ "path" => url, "content" => data })
 
-        if (dev_mode? || livereload?)
+        if (livereload?)
           @page.data["automatic_styles"] ||= []
-          @page.data["automatic_styles"].push("<link rel=\"stylesheet\" href=\"#{url}\">")
+          @page.data["automatic_styles"].push("<link rel=\"stylesheet\" href=\"/#{url}\">")
         elsif data.size > @config.fetch("automatic_inline_threshold")
           @page.data["automatic_styles"] ||= []
-          @page.data["automatic_styles"].push("<link rel=\"stylesheet\" href=\"#{url}\">")
+          @page.data["automatic_styles"].push("<link rel=\"stylesheet\" href=\"/#{url}\">")
         else
           @page.data["automatic_styles"] ||= []
           @page.data["automatic_styles"].push("<style>#{data}</style>")
@@ -138,10 +137,6 @@ module Hyde
 
       def keep_files?
         @config.fetch("keep_files") == true
-      end
-
-      def dev_mode?
-        @config.fetch("dev_mode") == true
       end
 
       def livereload?
@@ -206,12 +201,10 @@ module Hyde
       end
 
       def style
-        if dev_mode?
-          "expanded"
-        elsif !minify?
-          "expanded"
-        else
+        if minify?
           "compressed"
+        else
+          "expanded"
         end
       end
 
@@ -230,11 +223,9 @@ module Hyde
       def generate_file_name(files, data, prefix: nil)
         file_names = [prefix]
 
-        if dev_mode?
-          files.each { |file| file_names.push(file.gsub(".css", "")) }
-        end
+        files.each { |file| file_names.push(file.gsub(".css", "")) }
 
-        if @site.config["livereload"].nil?
+        unless livereload?
           file_names.push(Digest::MD5.hexdigest(data)[0, 6])
         end
 

@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Refactored
 
 - Use Jekyll::Cache instead of poro cache.
+- Remove dev_mode, instead use explicit options.
 
 ## [0.6.0] - 2024-10-30
 
