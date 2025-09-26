@@ -1,4 +1,4 @@
-require File.expand_path("./lib/hyde-page-css.rb")
+require_relative "lib/hyde-page-css.rb"
 
 Gem::Specification.new do |s|
   s.name = "hyde-page-css"
