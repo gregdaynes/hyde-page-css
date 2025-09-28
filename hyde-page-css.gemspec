@@ -1,8 +1,6 @@
-require_relative "lib/hyde-page-css.rb"
-
 Gem::Specification.new do |s|
   s.name = "hyde-page-css"
-  s.version = Hyde::Page::Css::VERSION
+  s.version = "0.7.1"
   s.summary = "Plugin for jekyll to enable per page css files"
   s.description = "Hyde Page CSS is a plugin for Jekyll that enables concatenating, processing and caching css files for separate pages."
   s.authors = ["Gregory Daynes"]
